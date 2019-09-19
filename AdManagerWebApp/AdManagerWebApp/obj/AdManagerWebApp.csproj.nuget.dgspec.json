@@ -1,0 +1,73 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\s702895\\source\\repos\\tietotekniikkaprojekti\\AdManagerWebApp\\AdManagerWebApp\\AdManagerWebApp.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\s702895\\source\\repos\\tietotekniikkaprojekti\\AdManagerWebApp\\AdManagerWebApp\\AdManagerWebApp.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\s702895\\source\\repos\\tietotekniikkaprojekti\\AdManagerWebApp\\AdManagerWebApp\\AdManagerWebApp.csproj",
+        "projectName": "AdManagerWebApp",
+        "projectPath": "C:\\Users\\s702895\\source\\repos\\tietotekniikkaprojekti\\AdManagerWebApp\\AdManagerWebApp\\AdManagerWebApp.csproj",
+        "packagesPath": "C:\\Users\\s702895\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\s702895\\source\\repos\\tietotekniikkaprojekti\\AdManagerWebApp\\AdManagerWebApp\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\s702895\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp2.2"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp2.2": {
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp2.2": {
+          "dependencies": {
+            "Microsoft.AspNetCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.AspNetCore.Razor.Design": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.NETCore.App": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[2.2.0, )",
+              "autoReferenced": true
+            }
+          },
+          "imports": [
+            "net461"
+          ],
+          "assetTargetFallback": true,
+          "warn": true
+        }
+      }
+    }
+  }
+}
