@@ -5,14 +5,31 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AdManagerWebApp.Models;
+using System.DirectoryServices.AccountManagement;
+using AdManagerWebApp.Helpers;
 
 namespace AdManagerWebApp.Controllers
 {
     public class HomeController : Controller
     {
+
+        private readonly PrincipalContext _context;
+
+        public HomeController(PrincipalContext DomainContext)
+        {
+            _context = DomainContext;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
+            string name = this.User.Identity.Name;
+            string[] namearray = name.Split("\\");
+            model.SamAccountName = namearray[namearray.Length -1];
+
+            PrincipalSearcher searcher = new PrincipalSearcher(model);
+            Alue71UserPrincipal DomainUser = (Alue71UserPrincipal)searcher.FindOne();
+            return View(DomainUser.ToViewModel());
         }
 
         public IActionResult Privacy()

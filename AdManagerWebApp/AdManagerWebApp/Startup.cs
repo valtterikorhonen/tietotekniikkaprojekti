@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.DirectoryServices.AccountManagement;
 using System.Linq;
 using System.Threading.Tasks;
+using AdManagerWebApp.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -31,6 +33,8 @@ namespace AdManagerWebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            PrincipalContext DomainContext = new PrincipalContext(ContextType.Domain, "ky.local", "OU=KY,DC=ky,DC=local", ContextOptions.Negotiate);
+            services.AddSingleton(DomainContext);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
