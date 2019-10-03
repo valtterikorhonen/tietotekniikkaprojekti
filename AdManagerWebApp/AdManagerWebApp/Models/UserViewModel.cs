@@ -10,7 +10,7 @@ namespace AdManagerWebApp.Models
         public string Name { get; set; }
         public string Email { get; set; }
         public string DisplayName { get; set; }
-        public string EnmployeeType { get; set; }
+        public string EmployeeType { get; set; }
         public string SamAccountName { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
