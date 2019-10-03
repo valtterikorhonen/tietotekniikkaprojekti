@@ -19,7 +19,10 @@ namespace AdManagerWebApp.Helpers
             {
                 Name = user.Name,
                 Email = user.EmailAddress,
-                DisplayName = user.DisplayName
+                DisplayName = user.DisplayName,
+                GivenName = user.GivenName,
+                Surname = user.Surname,
+                SamAccountName = user.SamAccountName
             };
         }
     }
