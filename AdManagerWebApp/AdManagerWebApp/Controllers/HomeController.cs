@@ -24,8 +24,7 @@ namespace AdManagerWebApp.Controllers
         {
             Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
             string name = this.User.Identity.Name;
-            string[] namearray = name.Split("\\");
-            model.SamAccountName = namearray[namearray.Length -1];
+            model.SamAccountName = name.Split("\\")[1];
 
             PrincipalSearcher searcher = new PrincipalSearcher(model);
             Alue71UserPrincipal DomainUser = (Alue71UserPrincipal)searcher.FindOne();

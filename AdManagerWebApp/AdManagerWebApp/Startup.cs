@@ -33,7 +33,9 @@ namespace AdManagerWebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            PrincipalContext DomainContext = new PrincipalContext(ContextType.Domain, "ky.local", "OU=KY,DC=ky,DC=local", ContextOptions.Negotiate);
+            var adConfigSection = Configuration.GetSection("AdConfig");
+            var config = adConfigSection.Get<AdConfig>();
+            PrincipalContext DomainContext = new PrincipalContext(ContextType.Domain, config.DomainName, config.Container, ContextOptions.Negotiate);
             services.AddSingleton(DomainContext);
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
