@@ -18,7 +18,7 @@ namespace AdManagerWebApp.Controllers
         // GET: Admin/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return View(new UserViewModel());
         }
 
         // GET: Admin/Create
