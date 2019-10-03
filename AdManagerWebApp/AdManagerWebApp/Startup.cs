@@ -33,6 +33,8 @@ namespace AdManagerWebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddAuthentication(Microsoft.AspNetCore.Server.IISIntegration.IISDefaults.AuthenticationScheme);
+
             var adConfigSection = Configuration.GetSection("AdConfig");
             var config = adConfigSection.Get<AdConfig>();
             PrincipalContext DomainContext = new PrincipalContext(ContextType.Domain, config.DomainName, config.Container, ContextOptions.Negotiate);

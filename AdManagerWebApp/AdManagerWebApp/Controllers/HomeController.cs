@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using AdManagerWebApp.Models;
 using System.DirectoryServices.AccountManagement;
 using AdManagerWebApp.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AdManagerWebApp.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
 
