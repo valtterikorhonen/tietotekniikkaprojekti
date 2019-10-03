@@ -4,29 +4,11 @@
 }
 
     <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <table class="table">
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.DisplayName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Email)
-                </th>
-            </tr>
-            <tr>
-                <td>
-                    @Html.DisplayFor(model => model.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.DisplayName)
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Email)
-                </td>
-            </tr>
-        </table>
+        <h1 class="display-4">Login</h1>
+
+       @Html.ActionLink("Login", "Details");
+
+      
+       @Html.ActionLink("Forgot Password","Reset");
+
     </div>

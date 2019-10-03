@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AdManagerWebApp.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
 
@@ -24,6 +24,13 @@ namespace AdManagerWebApp.Controllers
 
         public IActionResult Index()
         {
+           
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Details()
+        {
             Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
             string name = this.User.Identity.Name;
             model.SamAccountName = name.Split("\\")[1];
@@ -32,6 +39,7 @@ namespace AdManagerWebApp.Controllers
             Alue71UserPrincipal DomainUser = (Alue71UserPrincipal)searcher.FindOne();
             return View(DomainUser.ToViewModel());
         }
+
 
         public IActionResult Privacy()
         {
