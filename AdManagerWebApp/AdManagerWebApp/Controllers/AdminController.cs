@@ -21,29 +21,6 @@ namespace AdManagerWebApp.Controllers
             return View(new UserViewModel());
         }
 
-        // GET: Admin/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Admin/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
         // GET: Admin/Edit/5
         public ActionResult Edit(int id)
         {
