@@ -42,18 +42,23 @@ namespace AdManagerWebApp.Controllers
             return user;
         }
 
+        private Alue71UserPrincipal GetPrincipal()
+        {
+            Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
+            string name = this.User.Identity.Name;
+            model.SamAccountName = name.Split("\\")[1];
+
+            PrincipalSearcher searcher = new PrincipalSearcher(model);
+            return (Alue71UserPrincipal)searcher.FindOne();
+        }
+
         private UserViewModel GetUser()
         {
             UserViewModel user = GetSession();
 
             if(user == null)
             {
-                Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
-                string name = this.User.Identity.Name;
-                model.SamAccountName = name.Split("\\")[1];
-
-                PrincipalSearcher searcher = new PrincipalSearcher(model);
-                Alue71UserPrincipal DomainUser = (Alue71UserPrincipal)searcher.FindOne();
+                Alue71UserPrincipal DomainUser = GetPrincipal();
                 user = DomainUser.ToViewModel();
                 SetSession(user);
                 return user;
@@ -87,7 +92,8 @@ namespace AdManagerWebApp.Controllers
         {
             try
             {
-                // TODO: Add update logic here
+                Alue71UserPrincipal principal = GetPrincipal();
+                principal.UpdateFromModel(user);
 
                 return RedirectToAction(nameof(Details));
             }

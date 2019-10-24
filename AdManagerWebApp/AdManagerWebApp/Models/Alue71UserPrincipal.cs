@@ -12,5 +12,23 @@ namespace AdManagerWebApp.Models
     {
         public Alue71UserPrincipal(PrincipalContext context) : base(context)
         { }
+
+        [DirectoryProperty("title")]
+        public string Title
+        {
+            get
+            {
+                var attr = ExtensionGet("title");
+                if (attr.Length != 1)
+                {
+                    return null;
+                }
+                return (string)attr[0];
+            }
+            set
+            {
+                ExtensionSet("title", value);
+            }
+        }
     }
 }
