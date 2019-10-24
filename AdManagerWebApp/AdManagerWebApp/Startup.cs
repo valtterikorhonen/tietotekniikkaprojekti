@@ -33,6 +33,15 @@ namespace AdManagerWebApp
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options => 
+            {
+                options.Cookie.Name = "UserData";
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+            });
+
             services.AddAuthentication(Microsoft.AspNetCore.Server.IISIntegration.IISDefaults.AuthenticationScheme);
 
             var adConfigSection = Configuration.GetSection("AdConfig");
@@ -59,6 +68,7 @@ namespace AdManagerWebApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseCookiePolicy();
 
             app.UseMvc(routes =>

@@ -21,6 +21,31 @@ namespace AdManagerWebApp.Controllers
             return View(new UserViewModel());
         }
 
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(UserViewModel model)
+        {
+            if (false == ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            try
+            {
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View(model);
+            }
+        }
+
         // GET: Admin/Edit/5
         public ActionResult Edit(int id)
         {

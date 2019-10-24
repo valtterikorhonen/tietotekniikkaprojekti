@@ -8,18 +8,57 @@ using AdManagerWebApp.Models;
 using System.DirectoryServices.AccountManagement;
 using AdManagerWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace AdManagerWebApp.Controllers
 {
     //[Authorize]
     public class HomeController : Controller
     {
+        private readonly string SessionKey = "UserData";
 
         private readonly PrincipalContext _context;
 
         public HomeController(PrincipalContext DomainContext)
         {
             _context = DomainContext;
+        }
+
+        private void SetSession(UserViewModel user)
+        {
+            if(HttpContext.Session.Get<UserViewModel>(SessionKey) == default(UserViewModel))
+            {
+                HttpContext.Session.Set(SessionKey, user);
+            }
+        }
+
+        private UserViewModel GetSession()
+        {
+            UserViewModel user = HttpContext.Session.Get<UserViewModel>(SessionKey);
+            if(user == default(UserViewModel))
+            {
+                return null;
+            }
+            return user;
+        }
+
+        private UserViewModel GetUser()
+        {
+            UserViewModel user = GetSession();
+
+            if(user == null)
+            {
+                Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
+                string name = this.User.Identity.Name;
+                model.SamAccountName = name.Split("\\")[1];
+
+                PrincipalSearcher searcher = new PrincipalSearcher(model);
+                Alue71UserPrincipal DomainUser = (Alue71UserPrincipal)searcher.FindOne();
+                user = DomainUser.ToViewModel();
+                SetSession(user);
+                return user;
+            }
+            return user;
         }
 
         public IActionResult Index()
@@ -31,13 +70,31 @@ namespace AdManagerWebApp.Controllers
         [Authorize]
         public IActionResult Details()
         {
-            Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
-            string name = this.User.Identity.Name;
-            model.SamAccountName = name.Split("\\")[1];
+            return View(GetUser());
+        }
 
-            PrincipalSearcher searcher = new PrincipalSearcher(model);
-            Alue71UserPrincipal DomainUser = (Alue71UserPrincipal)searcher.FindOne();
-            return View(DomainUser.ToViewModel());
+        [Authorize]
+        public IActionResult Edit()
+        {
+            return View(GetUser());
+        }
+
+        // POST: Home/Edit/5
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, UserViewModel user)
+        {
+            try
+            {
+                // TODO: Add update logic here
+
+                return RedirectToAction(nameof(Details));
+            }
+            catch
+            {
+                return View(GetUser());
+            }
         }
 
 

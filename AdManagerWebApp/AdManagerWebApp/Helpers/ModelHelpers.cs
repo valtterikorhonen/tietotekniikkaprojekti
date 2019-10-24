@@ -17,6 +17,7 @@ namespace AdManagerWebApp.Helpers
 
             return new UserViewModel
             {
+                Id = 1,
                 Name = user.Name,
                 Email = user.EmailAddress,
                 DisplayName = user.DisplayName,

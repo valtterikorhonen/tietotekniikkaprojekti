@@ -15,5 +15,6 @@ namespace AdManagerWebApp.Models
         public string SamAccountName { get; set; }
         public string GivenName { get; set; }
         public string Surname { get; set; }
+        public string Address { get; set; }
     }
 }
