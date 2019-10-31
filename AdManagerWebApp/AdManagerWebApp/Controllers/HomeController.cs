@@ -94,12 +94,34 @@ namespace AdManagerWebApp.Controllers
             {
                 Alue71UserPrincipal principal = GetPrincipal();
                 principal.UpdateFromModel(user);
+                principal.Save();
 
                 return RedirectToAction(nameof(Details));
             }
             catch
             {
                 return View(GetUser());
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Password(int id, PasswordModel password)
+        {
+            try
+            {
+                Alue71UserPrincipal principal = GetPrincipal();
+                if(password.New == password.Repeat)
+                {
+                    principal.ChangePassword(password.Current, password.New);
+                }
+
+                return RedirectToAction(nameof(Details));
+            }
+            catch
+            {
+                return View("Edit", GetUser());
             }
         }
 

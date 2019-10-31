@@ -1,14 +1,23 @@
-﻿using AdManagerWebApp.Models;
+﻿using AdManagerWebApp.Helpers;
+using AdManagerWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.DirectoryServices.AccountManagement;
 
 namespace AdManagerWebApp.Controllers
 {
     [Authorize]
     public class AdminController : Controller
     {
+        private readonly PrincipalContext _context;
+
+        public AdminController(PrincipalContext DomainContext)
+        {
+            _context = DomainContext;
+        }
+
         // GET: Admin
         public ActionResult Index()
         {
@@ -37,7 +46,12 @@ namespace AdManagerWebApp.Controllers
 
             try
             {
-
+                Alue71UserPrincipal newUSer = new Alue71UserPrincipal(_context);
+                newUSer.UpdateFromModel(model);
+                newUSer.SetPassword("admin");
+                newUSer.ExpirePasswordNow();
+                newUSer.UnlockAccount();
+                newUSer.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -55,7 +69,7 @@ namespace AdManagerWebApp.Controllers
         // POST: Admin/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, UserViewModel user)
         {
             try
             {
