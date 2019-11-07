@@ -111,14 +111,14 @@ namespace AdManagerWebApp.Controllers
         [Authorize(Roles = "WebNormaali")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Password(int id, PasswordModel password)
+        public ActionResult Password(IFormCollection password)
         {
             try
             {
                 Alue71UserPrincipal principal = GetPrincipal();
-                if(password.New == password.Repeat)
+                if(password["New"] == password["Repeat"])
                 {
-                    principal.ChangePassword(password.Current, password.New);
+                    principal.ChangePassword(password["Current"], password["New"]);
                     principal.Save();
                 }
 
