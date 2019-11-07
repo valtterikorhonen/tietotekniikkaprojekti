@@ -118,7 +118,7 @@ namespace AdManagerWebApp.Controllers
                 Alue71UserPrincipal principal = GetPrincipal();
                 if(password["New"] == password["Repeat"])
                 {
-                    principal.ChangePassword(password["Current"], password["New"]);
+                    principal.ChangePassword(password["Old"], password["New"]);
                     principal.Save();
                 }
 
