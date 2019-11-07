@@ -23,7 +23,8 @@ namespace AdManagerWebApp.Helpers
                 GivenName = user.GivenName,
                 Surname = user.Surname,
                 SamAccountName = user.SamAccountName,
-                EmployeeType = user.Title
+                EmployeeType = user.Title,
+                Address = user.Street
             };
         }
 
@@ -47,6 +48,8 @@ namespace AdManagerWebApp.Helpers
                 principal.SamAccountName = user.SamAccountName;
             if (!string.IsNullOrEmpty(user.EmployeeType))
                 principal.Title = user.EmployeeType;
+            if (!string.IsNullOrEmpty(user.Address))
+                principal.Street = user.Address;
 
             return principal;
         }

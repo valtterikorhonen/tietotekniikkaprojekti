@@ -30,5 +30,22 @@ namespace AdManagerWebApp.Models
                 ExtensionSet("title", value);
             }
         }
+        [DirectoryProperty("street")]
+        public string Street
+        {
+            get
+            {
+                var attr = ExtensionGet("street");
+                if (attr.Length != 1)
+                {
+                    return null;
+                }
+                return (string)attr[0];
+            }
+            set
+            {
+                ExtensionSet("street", value);
+            }
+        }
     }
 }
