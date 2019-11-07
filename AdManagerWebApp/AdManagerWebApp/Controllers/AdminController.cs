@@ -8,7 +8,7 @@ using System.DirectoryServices.AccountManagement;
 
 namespace AdManagerWebApp.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "WebAdmin")]
     public class AdminController : Controller
     {
         private readonly PrincipalContext _context;
@@ -18,10 +18,21 @@ namespace AdManagerWebApp.Controllers
             _context = DomainContext;
         }
 
+        private List<UserViewModel> GetUsers()
+        {
+            var group = GroupPrincipal.FindByIdentity(_context, "WebNormaali");
+            List<UserViewModel> Users = new List<UserViewModel>();
+            foreach(Alue71UserPrincipal p in group.Members)
+            {
+                Users.Add(p.ToViewModel());
+            }
+            return Users;
+        }
+
         // GET: Admin
         public ActionResult Index()
         {
-            return View(new List<UserViewModel>());
+            return View(GetUsers());
         }
 
         // GET: Admin/Details/5
@@ -46,12 +57,15 @@ namespace AdManagerWebApp.Controllers
 
             try
             {
-                Alue71UserPrincipal newUSer = new Alue71UserPrincipal(_context);
-                newUSer.UpdateFromModel(model);
-                newUSer.SetPassword("admin");
-                newUSer.ExpirePasswordNow();
-                newUSer.UnlockAccount();
-                newUSer.Save();
+                Alue71UserPrincipal newUser = new Alue71UserPrincipal(_context);
+                model.DisplayName = model.GivenName;
+                model.Name = model.GivenName + " " + model.Surname;
+                model.Email = model.GivenName + "." + model.Surname + "@alue71.local";
+                newUser.UpdateFromModel(model);
+                newUser.SetPassword("admin");
+                newUser.ExpirePasswordNow();
+                newUser.UnlockAccount();
+                newUser.Save();
                 return RedirectToAction(nameof(Index));
             }
             catch

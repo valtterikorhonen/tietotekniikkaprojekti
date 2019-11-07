@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace AdManagerWebApp.Controllers
 {
-    //[Authorize]
     public class HomeController : Controller
     {
         private readonly string SessionKey = "UserData";
@@ -30,6 +29,11 @@ namespace AdManagerWebApp.Controllers
             {
                 HttpContext.Session.Set(SessionKey, user);
             }
+        }
+
+        private void ReplaceSession(UserViewModel user)
+        {
+            HttpContext.Session.Set(SessionKey, user);
         }
 
         private UserViewModel GetSession()
@@ -68,7 +72,6 @@ namespace AdManagerWebApp.Controllers
 
         public IActionResult Index()
         {
-           
             return View();
         }
 
@@ -88,13 +91,14 @@ namespace AdManagerWebApp.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, UserViewModel user)
+        public ActionResult Edit(UserViewModel user)
         {
             try
             {
                 Alue71UserPrincipal principal = GetPrincipal();
                 principal.UpdateFromModel(user);
                 principal.Save();
+                ReplaceSession(principal.ToViewModel());
 
                 return RedirectToAction(nameof(Details));
             }
@@ -104,7 +108,7 @@ namespace AdManagerWebApp.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "WebNormaali")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Password(int id, PasswordModel password)
@@ -115,6 +119,7 @@ namespace AdManagerWebApp.Controllers
                 if(password.New == password.Repeat)
                 {
                     principal.ChangePassword(password.Current, password.New);
+                    principal.Save();
                 }
 
                 return RedirectToAction(nameof(Details));
