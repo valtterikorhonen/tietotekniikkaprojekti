@@ -22,10 +22,12 @@ namespace AdManagerWebApp.Controllers
         private List<UserViewModel> GetUsers()
         {
             var group = GroupPrincipal.FindByIdentity(_context, "WebNormaali");
+
             List<UserViewModel> Users = new List<UserViewModel>();
-            foreach(Alue71UserPrincipal p in group.Members)
+            foreach(Principal p in group.GetMembers())
             {
-                Users.Add(p.ToViewModel());
+                //Users.Add(p.ToViewModel());
+                Users.Add(new UserViewModel { Name = p.Name, SamAccountName = p.SamAccountName });
             }
             return Users;
         }
