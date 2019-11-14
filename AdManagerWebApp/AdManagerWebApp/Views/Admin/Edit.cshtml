@@ -13,6 +13,7 @@
     <div class="col-md-6">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="SamAccountName" type="hidden"/>
             <div class="form-group">
                 <label asp-for="DisplayName" class="control-label"></label>
                 <input asp-for="DisplayName" class="form-control" />
