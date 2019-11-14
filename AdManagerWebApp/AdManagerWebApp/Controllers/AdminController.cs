@@ -69,6 +69,14 @@ namespace AdManagerWebApp.Controllers
                 newUser.ExpirePasswordNow();
                 newUser.UnlockAccount();
                 newUser.Save();
+
+                GroupPrincipal grp = GroupPrincipal.FindByIdentity(_context, "WebNormaali");
+
+                if (grp != null)
+                {
+                    grp.Members.Add(newUser);
+                    grp.Save();
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
