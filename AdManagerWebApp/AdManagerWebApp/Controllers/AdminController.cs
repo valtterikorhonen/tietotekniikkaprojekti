@@ -79,25 +79,38 @@ namespace AdManagerWebApp.Controllers
         }
 
         // GET: Admin/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(string id)
         {
-            return View();
+            Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
+            model.SamAccountName = id;
+
+            PrincipalSearcher searcher = new PrincipalSearcher(model);
+            Alue71UserPrincipal edituser = (Alue71UserPrincipal)searcher.FindOne();
+
+            return View(edituser.ToViewModel());
         }
 
         // POST: Admin/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, UserViewModel user)
+        public ActionResult Edit(UserViewModel user)
         {
             try
             {
-                // TODO: Add update logic here
+                Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
+                model.SamAccountName = user.SamAccountName;
+
+                PrincipalSearcher searcher = new PrincipalSearcher(model);
+                Alue71UserPrincipal edituser = (Alue71UserPrincipal)searcher.FindOne();
+                edituser.UpdateFromModel(user);
+                edituser.Save();
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.message = ex.Message;
+                return View(user);
             }
         }
 
