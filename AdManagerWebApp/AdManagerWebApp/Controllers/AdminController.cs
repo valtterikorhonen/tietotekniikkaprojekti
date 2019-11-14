@@ -3,6 +3,7 @@ using AdManagerWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 
@@ -68,8 +69,9 @@ namespace AdManagerWebApp.Controllers
                 newUser.Save();
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                ViewBag.message = ex.Message;
                 return View(model);
             }
         }
