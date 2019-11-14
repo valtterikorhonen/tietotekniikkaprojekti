@@ -68,7 +68,7 @@ namespace AdManagerWebApp.Controllers
                 newUser.UpdateFromModel(model);
                 newUser.SetPassword("admin");
                 newUser.ExpirePasswordNow();
-                newUser.UnlockAccount();
+                newUser.Enabled = true;
                 newUser.Save();
 
                 GroupPrincipal grp = GroupPrincipal.FindByIdentity(_context, "WebNormaali");
