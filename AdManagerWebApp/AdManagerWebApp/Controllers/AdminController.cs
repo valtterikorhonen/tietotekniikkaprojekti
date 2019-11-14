@@ -64,6 +64,7 @@ namespace AdManagerWebApp.Controllers
                 model.DisplayName = model.GivenName;
                 model.Name = model.GivenName + " " + model.Surname;
                 model.Email = model.GivenName + "." + model.Surname + "@alue71.local";
+                model.SamAccountName = model.GivenName.ToLower() + model.Surname.ToLower();
                 newUser.UpdateFromModel(model);
                 newUser.SetPassword("admin");
                 newUser.ExpirePasswordNow();
