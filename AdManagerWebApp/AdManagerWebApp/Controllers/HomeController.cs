@@ -124,8 +124,9 @@ namespace AdManagerWebApp.Controllers
 
                 return RedirectToAction(nameof(Details));
             }
-            catch
+            catch (Exception ex)
             {
+                ViewBag.message = ex.Message;
                 return View("Edit", GetUser());
             }
         }
