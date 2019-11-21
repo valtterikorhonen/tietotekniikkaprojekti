@@ -8,7 +8,10 @@ namespace AdManagerWebApp.Models
 {
     public class ResetContext : DbContext
     {
-
         public DbSet<PasswordReset> Resets { get; set; }
+
+        public ResetContext(DbContextOptions<ResetContext> options) : base(options)
+        {
+        }
     }
 }
