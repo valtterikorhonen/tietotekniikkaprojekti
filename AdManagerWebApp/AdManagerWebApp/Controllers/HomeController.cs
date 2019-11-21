@@ -10,6 +10,7 @@ using AdManagerWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mail;
+using Microsoft.EntityFrameworkCore;
 
 namespace AdManagerWebApp.Controllers
 {
@@ -21,10 +22,13 @@ namespace AdManagerWebApp.Controllers
 
         private readonly SmtpClient _smtpClient;
 
-        public HomeController(PrincipalContext DomainContext, SmtpClient smtpClient)
+        private readonly ResetContext _DbContext;
+
+        public HomeController(PrincipalContext DomainContext, SmtpClient smtpClient, ResetContext db)
         {
             _context = DomainContext;
             _smtpClient = smtpClient;
+            _DbContext = db;
         }
 
         protected override void Dispose(bool disposing)
@@ -34,7 +38,7 @@ namespace AdManagerWebApp.Controllers
         }
 
 
-    private void SetSession(UserViewModel user)
+        private void SetSession(UserViewModel user)
         {
             if(HttpContext.Session.Get<UserViewModel>(SessionKey) == default(UserViewModel))
             {
@@ -150,13 +154,17 @@ namespace AdManagerWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Reset(IFormCollection form)
         {
-            string code = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8);
+            string resetcode = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 16);
+            string resetuser = form["email"];
+
+            _DbContext.Resets.Add(new PasswordReset { code = resetcode, user = resetuser.Split("@")[0] });
+            await _DbContext.SaveChangesAsync();
 
             await _smtpClient.SendMailAsync(new MailMessage(
                 from: "webapp@alue71.local",
                 to: form["email"],
                 subject: "Password reset link",
-                body: "confirmreset/" + code
+                body: "confirmreset/" + resetcode
             ));
 
             return RedirectToAction("Index");
