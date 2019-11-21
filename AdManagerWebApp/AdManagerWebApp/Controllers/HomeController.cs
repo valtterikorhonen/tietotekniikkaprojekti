@@ -148,13 +148,15 @@ namespace AdManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetAsync(IFormCollection form)
+        public async Task<IActionResult> Reset(IFormCollection form)
         {
+            string code = Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8);
+
             await _smtpClient.SendMailAsync(new MailMessage(
                 from: "webapp@alue71.local",
                 to: form["email"],
-                subject: "Test message subject",
-                body: "Test message body"
+                subject: "Password reset link",
+                body: "confirmreset/" + code
             ));
 
             return RedirectToAction("Index");
