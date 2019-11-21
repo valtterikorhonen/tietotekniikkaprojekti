@@ -9,6 +9,7 @@ using System.DirectoryServices.AccountManagement;
 using AdManagerWebApp.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
 
 namespace AdManagerWebApp.Controllers
 {
@@ -18,12 +19,22 @@ namespace AdManagerWebApp.Controllers
 
         private readonly PrincipalContext _context;
 
-        public HomeController(PrincipalContext DomainContext)
+        private readonly SmtpClient _smtpClient;
+
+        public HomeController(PrincipalContext DomainContext, SmtpClient smtpClient)
         {
             _context = DomainContext;
+            _smtpClient = smtpClient;
         }
 
-        private void SetSession(UserViewModel user)
+        protected override void Dispose(bool disposing)
+        {  
+            _smtpClient.Dispose();  
+            base.Dispose(disposing);  
+        }
+
+
+    private void SetSession(UserViewModel user)
         {
             if(HttpContext.Session.Get<UserViewModel>(SessionKey) == default(UserViewModel))
             {
@@ -91,7 +102,7 @@ namespace AdManagerWebApp.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(UserViewModel user)
+        public IActionResult Edit(UserViewModel user)
         {
             try
             {
@@ -111,7 +122,7 @@ namespace AdManagerWebApp.Controllers
         [Authorize(Roles = "WebNormaali")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Password(IFormCollection password)
+        public IActionResult Password(IFormCollection password)
         {
             try
             {
@@ -129,6 +140,25 @@ namespace AdManagerWebApp.Controllers
                 ViewBag.message = ex.Message;
                 return View("Edit", GetUser());
             }
+        }
+
+        public IActionResult Reset()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetAsync(IFormCollection form)
+        {
+            await _smtpClient.SendMailAsync(new MailMessage(
+                from: "webapp@alue71.local",
+                to: form["email"],
+                subject: "Test message subject",
+                body: "Test message body"
+            ));
+
+            return RedirectToAction("Index");
+
         }
 
 

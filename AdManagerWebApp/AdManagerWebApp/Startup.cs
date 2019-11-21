@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using AdManagerWebApp.Models;
 using Microsoft.AspNetCore.Builder;
@@ -46,8 +48,32 @@ namespace AdManagerWebApp
 
             var adConfigSection = Configuration.GetSection("AdConfig");
             var config = adConfigSection.Get<AdConfig>();
-            PrincipalContext DomainContext = new PrincipalContext(ContextType.Domain, config.DomainName, config.Container, ContextOptions.Negotiate);
+            PrincipalContext DomainContext;
+            if (string.IsNullOrEmpty(config.Password) || string.IsNullOrEmpty(config.Username))
+            {
+                DomainContext = new PrincipalContext(ContextType.Domain,
+                    config.DomainName, config.Container, ContextOptions.Negotiate);
+            }
+            else
+            {
+                DomainContext = new PrincipalContext(ContextType.Domain, 
+                    config.DomainName, config.Container, ContextOptions.Negotiate, config.Username, config.Password);
+            }
             services.AddSingleton(DomainContext);
+
+            services.AddScoped<SmtpClient>((serviceProvider) =>
+            {
+                var smtpconfig = serviceProvider.GetRequiredService<IConfiguration>();
+                return new SmtpClient()
+            {
+                Host = smtpconfig.GetValue<String>("EmailConfig:Smtp:Host"),  
+                Port = smtpconfig.GetValue<int>("EmailConfig:Smtp:Port"),  
+                Credentials = new NetworkCredential(
+                smtpconfig.GetValue<String>("EmailConfig:Smtp:Username"),
+                smtpconfig.GetValue<String>("EmailConfig:Smtp:Password"))
+            };
+            });
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
