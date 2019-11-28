@@ -186,7 +186,7 @@ namespace AdManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public IActionResult ConfirmReset(IFormCollection form)
+        public async Task<IActionResult> ConfirmReset(IFormCollection form)
         {
             if(form["new"] == form["repeat"] && !string.IsNullOrEmpty(form["new"]))
             {
@@ -203,6 +203,7 @@ namespace AdManagerWebApp.Controllers
                         user.SetPassword(form["new"]);
                         ViewBag.message = "Salasana vaihdettu";
                         _DbContext.Resets.Remove(_DbContext.Resets.First(r => r.code == form["code"]));
+                        await _DbContext.SaveChangesAsync();
                         return RedirectToAction("Index");
                     }
                     catch (Exception ex)
