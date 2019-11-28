@@ -196,16 +196,24 @@ namespace AdManagerWebApp.Controllers
                 PrincipalSearcher searcher = new PrincipalSearcher(model);
                 Alue71UserPrincipal user = (Alue71UserPrincipal)searcher.FindOne();
 
-                try
+                if(_DbContext.Resets.Count(r => r.code == form["code"]) == 1)
                 {
-                    user.SetPassword(form["new"]);
-                    ViewBag.message = "Salasana vaihdettu";
-                    return RedirectToAction("Index");
+                    try
+                    {
+                        user.SetPassword(form["new"]);
+                        ViewBag.message = "Salasana vaihdettu";
+                        _DbContext.Resets.Remove(_DbContext.Resets.First(r => r.code == form["code"]));
+                        return RedirectToAction("Index");
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.message = ex.Message;
+                        return View(new PasswordReset() { code = form["code"], user = form["account"] });
+                    }
                 }
-                catch(Exception ex)
+                else
                 {
-                    ViewBag.message = ex.Message;
-                    return View(new PasswordReset() { code = form["code"], user = form["account"] });
+                    ViewBag.message = "Virheellinen koodi";
                 }
             }
             else
