@@ -190,7 +190,12 @@ namespace AdManagerWebApp.Controllers
         {
             if(form["new"] == form["repeat"] && !string.IsNullOrEmpty(form["new"]))
             {
-                Alue71UserPrincipal user = GetPrincipal();
+                Alue71UserPrincipal model = new Alue71UserPrincipal(_context);
+                model.SamAccountName = form["account"];
+
+                PrincipalSearcher searcher = new PrincipalSearcher(model);
+                Alue71UserPrincipal user = (Alue71UserPrincipal)searcher.FindOne();
+
                 try
                 {
                     user.SetPassword(form["new"]);
