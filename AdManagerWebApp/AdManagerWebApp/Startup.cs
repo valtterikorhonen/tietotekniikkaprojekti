@@ -76,7 +76,7 @@ namespace AdManagerWebApp
             });
 
             services.AddDbContext<ResetContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("ResetContext")));
+                options.UseSqlServer(Configuration.GetConnectionString("ResetContext")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
