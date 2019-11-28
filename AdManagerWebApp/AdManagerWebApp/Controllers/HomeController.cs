@@ -214,6 +214,7 @@ namespace AdManagerWebApp.Controllers
                 else
                 {
                     ViewBag.message = "Virheellinen koodi";
+                    return View(new PasswordReset() { code = form["code"], user = form["account"] });
                 }
             }
             else
