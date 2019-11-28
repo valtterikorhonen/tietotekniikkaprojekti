@@ -171,6 +171,45 @@ namespace AdManagerWebApp.Controllers
 
         }
 
+        public async Task<IActionResult> ConfirmReset(string id)
+        {
+            PasswordReset reset = await _DbContext.Resets.FirstOrDefaultAsync(r => r.code == id);
+            if (reset != null)
+            {
+                return View(reset);
+            }
+            else
+            {
+                ViewBag.message = "Virheellinen koodi";
+                return View(new PasswordReset());
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ConfirmReset(IFormCollection form)
+        {
+            if(form["new"] == form["repeat"] && !string.IsNullOrEmpty(form["new"]))
+            {
+                Alue71UserPrincipal user = GetPrincipal();
+                try
+                {
+                    user.SetPassword(form["new"]);
+                    ViewBag.message = "Salasana vaihdettu";
+                    return RedirectToAction("Index");
+                }
+                catch(Exception ex)
+                {
+                    ViewBag.message = ex.Message;
+                    return View(new PasswordReset() { code = form["code"], user = form["account"] });
+                }
+            }
+            else
+            {
+                ViewBag.message = "Tarkista salasana";
+                return View(new PasswordReset() { code = form["code"], user = form["account"] });
+            }
+        }
+
 
         public IActionResult Privacy()
         {
